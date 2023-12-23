@@ -19,7 +19,11 @@
     "isolatedModules": true,
     "types": [
       "node"
-    ]
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "incremental": true
   },
   "exclude": [
     "node_modules"

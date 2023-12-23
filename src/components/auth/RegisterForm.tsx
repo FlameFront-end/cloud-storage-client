@@ -6,29 +6,41 @@ import { setCookie } from 'nookies'
 import * as Api from '@/api'
 
 const RegisterForm: FC = () => {
+  const handleSuccess = (data: any) => {
+    console.log(data)
+
+    notification.success({
+      message: 'Успешно!',
+      description: 'Переходим в админ-панель...',
+      duration: 2,
+    })
+
+    setCookie(null, '_token', data.token, {
+      path: '/',
+    })
+
+    console.log(data.token)
+
+    location.href = '/dashboard'
+  }
+
+  const handleError = (err: Error) => {
+    console.warn(err)
+
+    const errorMessage = err.message || 'Ошибка при регистрации'
+    notification.error({
+      message: 'Ошибка!',
+      description: errorMessage,
+      duration: 2,
+    })
+  }
+
   const onSubmit = async (values: RegisterFormDTO) => {
     try {
-      const { token } = await Api.auth.register(values)
-
-      notification.success({
-        message: 'Успешно!',
-        description: 'Переходим в админ-панель...',
-        duration: 2,
-      })
-
-      setCookie(null, '_token', token, {
-        path: '/',
-      })
-
-      location.href = '/dashboard'
+      const data = await Api.auth.register(values)
+      handleSuccess(data)
     } catch (err) {
-      console.warn(err)
-
-      notification.error({
-        message: 'Ошибка!',
-        description: 'Ошибка при регистрации',
-        duration: 2,
-      })
+      handleError(err as Error)
     }
   }
 
