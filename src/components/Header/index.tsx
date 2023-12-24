@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Layout, Avatar, Menu, Popover, Button } from 'antd'
+import { Layout, Avatar, Menu, Popover, Button, Popconfirm } from 'antd'
 import styles from './Header.module.scss'
 import { CloudOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/router'
@@ -10,10 +10,8 @@ const Header: FC = () => {
   const selectedMenu = router.pathname
 
   const onClickLogout = () => {
-    if (window.confirm('Вы действительно хотите выйти?')) {
-      Api.auth.logout()
-      location.href = '/dashboard/auth'
-    }
+    Api.auth.logout()
+    location.href = '/'
   }
 
   return (
@@ -31,20 +29,21 @@ const Header: FC = () => {
             mode="horizontal"
             defaultSelectedKeys={[selectedMenu]}
             onSelect={({ key }) => router.push(key)}
-            items={[
-              { key: '/dashboard', label: 'Главная' },
-              { key: '/dashboard/profile', label: 'Профиль' },
-            ]}
-          />
+          >
+            <Menu.Item key="/dashboard">Главная</Menu.Item>
+            <Menu.Item key="/dashboard/profile">Профиль</Menu.Item>
+          </Menu>
         </div>
 
         <div className={styles.headerRight}>
           <Popover
             trigger="click"
             content={
-              <Button type="primary" danger onClick={onClickLogout}>
-                Выйти
-              </Button>
+              <Popconfirm title="Вы действительно хотите выйти?" okText="Да" cancelText="Нет" onConfirm={onClickLogout}>
+                <Button type="primary" danger>
+                  Выйти
+                </Button>
+              </Popconfirm>
             }
           >
             <Avatar>A</Avatar>

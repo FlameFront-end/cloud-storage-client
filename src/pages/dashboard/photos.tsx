@@ -8,13 +8,14 @@ import { FileItem } from '@/api/dto/files.dto'
 import * as Api from '@/api/index'
 
 import { DashboardLayout } from '@/layouts/DashboardLayout'
+import FileActions from '@/components/FileActions'
 import Files from '@/modules/Files'
 
-interface DashboardPageProps {
+interface DashboardPhotosProps {
   items: FileItem[]
 }
 
-const DashboardPage: NextPageWithLayout<DashboardPageProps> = ({ items }) => {
+const DashboardPhotos: NextPageWithLayout<DashboardPhotosProps> = ({ items }) => {
   return (
     <DashboardLayout>
       <Files items={items} withActions={true} />
@@ -22,7 +23,7 @@ const DashboardPage: NextPageWithLayout<DashboardPageProps> = ({ items }) => {
   )
 }
 
-DashboardPage.getLayout = (page: ReactNode) => {
+DashboardPhotos.getLayout = (page: ReactNode) => {
   return <Layout title="Dashboard / Главная">{page}</Layout>
 }
 
@@ -34,7 +35,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   }
 
   try {
-    const items = await Api.files.getAll()
+    const items = await Api.files.getAll('photos')
 
     return {
       props: {
@@ -51,4 +52,4 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   }
 }
 
-export default DashboardPage
+export default DashboardPhotos

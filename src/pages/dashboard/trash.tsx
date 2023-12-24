@@ -1,5 +1,8 @@
 import { GetServerSidePropsContext } from 'next'
 import { ReactNode } from 'react'
+import { useRouter } from 'next/router'
+import { DeleteOutlined, FileImageOutlined, FileOutlined } from '@ant-design/icons'
+import { Menu } from 'antd'
 import Layout from '@/layouts/Layout'
 import { NextPageWithLayout } from '@/pages/_app'
 import FileList from '@/components/FileList'
@@ -10,20 +13,20 @@ import * as Api from '@/api/index'
 import { DashboardLayout } from '@/layouts/DashboardLayout'
 import Files from '@/modules/Files'
 
-interface DashboardPageProps {
+interface DashboardTrashProps {
   items: FileItem[]
 }
 
-const DashboardPage: NextPageWithLayout<DashboardPageProps> = ({ items }) => {
+const DashboardTrash: NextPageWithLayout<DashboardTrashProps> = ({ items }) => {
   return (
     <DashboardLayout>
-      <Files items={items} withActions={true} />
+      <Files items={items} withActions={false} />
     </DashboardLayout>
   )
 }
 
-DashboardPage.getLayout = (page: ReactNode) => {
-  return <Layout title="Dashboard / Главная">{page}</Layout>
+DashboardTrash.getLayout = (page: ReactNode) => {
+  return <Layout title="Dashboard / Корзина">{page}</Layout>
 }
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -34,7 +37,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   }
 
   try {
-    const items = await Api.files.getAll()
+    const items = await Api.files.getAll('trash')
 
     return {
       props: {
@@ -51,4 +54,4 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   }
 }
 
-export default DashboardPage
+export default DashboardTrash

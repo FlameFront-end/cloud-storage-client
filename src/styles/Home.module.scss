@@ -3,6 +3,14 @@
   margin: 40px auto;
 }
 
+.index {
+  width: 1200px;
+  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .sidebar {
   display: flex;
   flex-direction: column;
